@@ -2,7 +2,9 @@ version: '1'
 
 services:
   web:
-    image:ayushftw/test_playground:latest
+    image: ayushftw/test_playground:latest
+    environment:
+      - PASS=$PASS
     ports:
      - "5000:5001"
  
