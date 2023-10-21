@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('cloning') {
+            steps {
+                echo 'cloning code from github'
+                git url:"https://github.com/ayushgupta4002/playground.git", branch: "main"
+            }
+        }
+        stage('build'){
+            steps{
+                echo 'building'
+                sh "docker build -t test_playground ."
+            }
+        }
+        stage('push to dockerhub'){
+            steps{
+                echo 'pushing to dockerhub'
+                withCredentials([usernamePassword(credentialsId:"dockerhub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
+                     sh "docker tag test_playground ${env.dockerHubUser}/test_playground:latest"
+                     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+                     sh "docker push ${env.dockerHubUser}/test_playground:latest"
+                }
+            }
+        }
+        stage('deploy'){
+            steps{
+                echo 'deploying'
+                withCredentials([string(credentialsId: 'mongopass', variable: 'pass')]){
+                sh '''     
+                docker-compose down
+                export PASS=${pass}
+                docker-compose up -d
+                '''
+                }
+         
+            }
+        }
+    }
+}
