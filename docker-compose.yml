@@ -2,7 +2,7 @@ version: '1'
 
 services:
   web:
-    build: .
+    image:ayushftw/test_playground:latest
     ports:
      - "5000:5001"
  
