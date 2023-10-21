@@ -43,7 +43,7 @@ mongoose
     });
 
     app.get("/", (req, res) => {
-      res.send({ message: "This server is up with grace of krishna" });
+      res.send({ message: "This server is up, Hare Krishna" });
     });
 
     app.listen(port, () => {
